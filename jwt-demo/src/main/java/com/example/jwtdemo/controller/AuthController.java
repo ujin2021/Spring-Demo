@@ -37,10 +37,12 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getPassword()); // authenticationToken을 생성한다
 
+        log.info("authenticationToken = {}", authenticationToken);
         // 위에서 만든 authenticationToken을 받아 authenticate가 실행이 될 때 -> loadByUsername method가 실행된다
         // 그 결과값을 가지고 authentication 객체를 생성한다
         // 그 객체를 securitycontextholder에 저장한다
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        log.info("authentication = {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // authentication 객체를 createToken method를 통해 jwt를 생성한다

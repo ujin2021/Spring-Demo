@@ -46,13 +46,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers(
                         "/h2-console/**",
-                        "/favicon.ico"
+                        "/favicon.ico",
+                        "/error"
                 );
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
+    public void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
                 .csrf().disable() // token 방식을 사용하므로 csrf설정을 disable한다
 
                 .exceptionHandling() // exception을 handling할 때
