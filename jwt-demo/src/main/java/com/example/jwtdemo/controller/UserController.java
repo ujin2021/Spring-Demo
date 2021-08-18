@@ -26,4 +26,17 @@ public class UserController {
     ) {
         return ResponseEntity.ok(userService.signup(userDto));
     }
+
+    // ROLE에 따른 접근 권한
+    @GetMapping("/user")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<User> getMyUserInfo() {
+        return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
+    }
+
+    @GetMapping("/user/{username}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
+        return ResponseEntity.ok(userService.getUserWithAuthorities(userId).get());
+    }
 }

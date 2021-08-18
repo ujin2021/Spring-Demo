@@ -1,6 +1,6 @@
 package com.example.jwtdemo.service;
 
-
+import com.example.jwtdemo.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.example.jwtdemo.dto.UserDto;
 import com.example.jwtdemo.entity.Authority;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -45,5 +46,17 @@ public class UserService {
 
         // User 정보와 권한정보를 저장한다
         return userRepository.save(user);
+    }
+
+    // userId를 parameter로 받고 user객체와 권한정보를 갖고 올 수 있는 method
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithAuthorities(String userId) {
+        return userRepository.findOneWithAuthoritiesByUserId(userId);
+    }
+
+    // 현재 security context에 저장되어 있는 userId에 해당하는 user정보와 권한정보만 받아갈 수 있다
+    @Transactional(readOnly = true)
+    public Optional<User> getMyUserWithAuthorities() {
+        return SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
     }
 }

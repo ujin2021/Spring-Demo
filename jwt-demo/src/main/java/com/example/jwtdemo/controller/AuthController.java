@@ -41,7 +41,6 @@ public class AuthController {
         // 그 결과값을 가지고 authentication 객체를 생성한다
         // 그 객체를 securitycontextholder에 저장한다
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        log.info("authentication = {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // authentication 객체를 createToken method를 통해 jwt를 생성한다
