@@ -7,3 +7,9 @@ spring 공부하는 레포
 * domain, repository, service, controller
 * 회원 이름으로 조회, 회원 전체 조회 (rest api)
 > 참고 : https://goddaehee.tistory.com/209, 인프런강의(김영한님 - 스프링 입문 db 연결)
+
+### Jwt demo
+* jwt, spring security 적용
+* h2 database
+* 회원가입, 로그인
+* 로그인 시 jwt 발급
