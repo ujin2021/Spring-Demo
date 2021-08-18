@@ -57,6 +57,13 @@ public class UserService {
     // 현재 security context에 저장되어 있는 userId에 해당하는 user정보와 권한정보만 받아갈 수 있다
     @Transactional(readOnly = true)
     public Optional<User> getMyUserWithAuthorities() {
+//        현재 사용자의 userId를 가져오는 util성 method
+//        String userId = SecurityUtil.getCurrentUserId().get();
+//        log.info("userId1 = {}", userId); // admin
+//
+//        Optional<User> u = SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
+//        log.info("user = {}", u.get()); // User object
+//        log.info("userId2 = {}", u.get().getUserId()); // admin
         return SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
     }
 }
