@@ -1,5 +1,6 @@
 package com.example.jwtdemo.service;
 
+import com.example.jwtdemo.exception.DuplicateMemberException;
 import com.example.jwtdemo.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.example.jwtdemo.dto.UserDto;
@@ -29,7 +30,8 @@ public class UserService {
     public User signup(UserDto userDto) {
         // DB에 저장되어 있는지 확인
         if (userRepository.findOneWithAuthoritiesByUserId(userDto.getUserId()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 유저 입니다.");
+            // throw new RuntimeException("이미 가입되어 있는 유저 입니다."); // 기존 error 처리
+            throw new DuplicateMemberException("이미 가입되어 있는 유저입니다."); // 새로운 exception class 생성
         }
 
         // DB에 없다면 권한정보를 만든다 - 회원가입을 통해 만들어진 user는 User 권한을 가진다
@@ -37,6 +39,7 @@ public class UserService {
                 .authorityName("ROLE_USER") // ROLE_USER 이라는 권한을 가진다
                 .build();
 
+        // builder pattern의 장점
         // User 정보를 만든다
         User user = User.builder()
                 .userId(userDto.getUserId())
