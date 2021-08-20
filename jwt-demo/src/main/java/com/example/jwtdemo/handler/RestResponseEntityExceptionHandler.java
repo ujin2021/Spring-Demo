@@ -14,11 +14,11 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 @ControllerAdvice // application의 예외처리를 맡음
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ResponseStatus(CONFLICT) // 예외의 응답상태
+    @ResponseStatus(CONFLICT) // 예외의 응답상태 (409)
     @ExceptionHandler(value = { DuplicateMemberException.class })
     @ResponseBody
     protected ErrorDto badRequest(RuntimeException ex, WebRequest request) {
-        return new ErrorDto(CONFLICT.value(), ex.getMessage());
+        return new ErrorDto(CONFLICT.value(), ex.getMessage()); // CONFLICT value : 409
     }
 }
 /*
