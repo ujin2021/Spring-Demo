@@ -41,7 +41,7 @@ public class UserService {
         User user = User.builder()
                 .userId(userDto.getUserId())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .authorities(Collections.singleton(authority))
+                .authorities(Collections.singleton(authority)) // set : Collections.singleton(T o) 단일원소일때 사용
                 .build();
 
         // User 정보와 권한정보를 저장한다
