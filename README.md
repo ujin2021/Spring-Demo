@@ -14,3 +14,4 @@ spring 공부하는 레포
 * 회원가입, 로그인
 * 로그인 시 jwt 발급
 * 회원가입시 중복 id가 존재할 때 exception handling
+> 참고 : https://github.com/ujin2021/SpringBoot-JWT (인프런 정은구님 강의 + ParkJiwoon님 코드)
