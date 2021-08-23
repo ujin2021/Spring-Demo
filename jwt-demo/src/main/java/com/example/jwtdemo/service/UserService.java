@@ -1,9 +1,10 @@
 package com.example.jwtdemo.service;
 
+import com.example.jwtdemo.dto.response.UserResponseDto;
 import com.example.jwtdemo.exception.DuplicateMemberException;
 import com.example.jwtdemo.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
-import com.example.jwtdemo.dto.UserDto;
+import com.example.jwtdemo.dto.request.SignupDto;
 import com.example.jwtdemo.entity.Authority;
 import com.example.jwtdemo.entity.User;
 import com.example.jwtdemo.repository.UserRepository;
@@ -27,9 +28,9 @@ public class UserService {
     }
 
     @Transactional
-    public User signup(UserDto userDto) {
+    public User signup(SignupDto signupDto) {
         // DB에 저장되어 있는지 확인
-        if (userRepository.findOneWithAuthoritiesByUserId(userDto.getUserId()).orElse(null) != null) {
+        if (userRepository.findOneWithAuthoritiesByUserId(signupDto.getUserId()).orElse(null) != null) {
             // throw new RuntimeException("이미 가입되어 있는 유저 입니다."); // 기존 error 처리
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다."); // 새로운 exception class 생성
         }
@@ -42,8 +43,8 @@ public class UserService {
         // builder pattern의 장점
         // User 정보를 만든다
         User user = User.builder()
-                .userId(userDto.getUserId())
-                .password(passwordEncoder.encode(userDto.getPassword()))
+                .userId(signupDto.getUserId())
+                .password(passwordEncoder.encode(signupDto.getPassword()))
                 .authorities(Collections.singleton(authority)) // set : Collections.singleton(T o) 단일원소일때 사용
                 .build();
 
@@ -51,22 +52,38 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // userId를 parameter로 받고 user객체와 권한정보를 갖고 올 수 있는 method
+//    // userId를 parameter로 받고 user객체와 권한정보를 갖고 올 수 있는 method
+//    @Transactional(readOnly = true)
+//    public Optional<User> getUserWithAuthorities(String userId) {
+//        return userRepository.findOneWithAuthoritiesByUserId(userId);
+//    }
+//
+//    // 현재 security context에 저장되어 있는 userId에 해당하는 user정보와 권한정보만 받아갈 수 있다
+//    @Transactional(readOnly = true)
+//    public Optional<User> getMyUserWithAuthorities() {
+////        현재 사용자의 userId를 가져오는 util성 method
+////        String userId = SecurityUtil.getCurrentUserId().get();
+////        log.info("userId1 = {}", userId); // admin
+////
+////        Optional<User> u = SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
+////        log.info("user = {}", u.get()); // User object
+////        log.info("userId2 = {}", u.get().getUserId()); // admin
+//        return SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
+//    }
+
+    // req로 받은 userId에 해당하는 user 정보를 넘겨준다
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(String userId) {
-        return userRepository.findOneWithAuthoritiesByUserId(userId);
+    public UserResponseDto getMemberInfo(String userId) {
+        return userRepository.findByUserId(userId) // findOneWithAuthoritiesByUserId
+                .map(UserResponseDto::of)
+                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다"));
     }
 
-    // 현재 security context에 저장되어 있는 userId에 해당하는 user정보와 권한정보만 받아갈 수 있다
+    // 현재 SecurityContext에 있는 userId를 가져와 해당하는 user 정보를 넘겨준다
     @Transactional(readOnly = true)
-    public Optional<User> getMyUserWithAuthorities() {
-//        현재 사용자의 userId를 가져오는 util성 method
-//        String userId = SecurityUtil.getCurrentUserId().get();
-//        log.info("userId1 = {}", userId); // admin
-//
-//        Optional<User> u = SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
-//        log.info("user = {}", u.get()); // User object
-//        log.info("userId2 = {}", u.get().getUserId()); // admin
-        return SecurityUtil.getCurrentUserId().flatMap(userRepository::findOneWithAuthoritiesByUserId);
+    public UserResponseDto getMyInfo() {
+        return userRepository.findByUserId(SecurityUtil.getCurrentUserId().get())
+                .map(UserResponseDto::of)
+                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다"));
     }
 }

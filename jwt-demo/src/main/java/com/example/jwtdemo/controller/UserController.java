@@ -1,7 +1,8 @@
 package com.example.jwtdemo.controller;
 
+import com.example.jwtdemo.dto.response.UserResponseDto;
 import lombok.extern.slf4j.Slf4j;
-import com.example.jwtdemo.dto.UserDto;
+import com.example.jwtdemo.dto.request.SignupDto;
 import com.example.jwtdemo.entity.User;
 import com.example.jwtdemo.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +23,36 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<User> signup(
-            @Valid @RequestBody UserDto userDto
+            @Valid @RequestBody SignupDto signupDto
     ) {
-        return ResponseEntity.ok(userService.signup(userDto));
+        return ResponseEntity.ok(userService.signup(signupDto));
     }
 
-    // ROLE에 따른 접근 권한
-    @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<User> getMyUserInfo() {
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
-    }
+//    // ROLE에 따른 접근 권한
+//    @GetMapping("/user")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<User> getMyUserInfo() {
+//        return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
+//    }
+//
+//    @GetMapping("/user/{userId}")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+//    public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
+//        return ResponseEntity.ok(userService.getUserWithAuthorities(userId).get());
+//    }
 
-    @GetMapping("/user/{userId}")
+    // userId + authorities 반환
+    @GetMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.getUserWithAuthorities(userId).get());
+    public ResponseEntity<UserResponseDto> getMemberInfo(@PathVariable String userId) {
+        return ResponseEntity.ok(userService.getMemberInfo(userId));
     }
+
+    // 내 정보 반환 (userId + authorities)
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<UserResponseDto> getMyInfo() {
+        return ResponseEntity.ok(userService.getMyInfo());
+    }
+
 }

@@ -3,13 +3,16 @@ package com.example.jwtdemo.repository;
 import com.example.jwtdemo.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     // join해서 한번의 query로 load할 때 사용
     @EntityGraph(attributePaths = "authorities") // Lazy조회가 아닌 Eager조회로 authorities를 같이 가져온다
     Optional<User> findOneWithAuthoritiesByUserId(String userId); // userId를 기준으로 user의 권한정보도 같이 가져온다
+    Optional<User> findByUserId(String userId);
 }
 
 /*
