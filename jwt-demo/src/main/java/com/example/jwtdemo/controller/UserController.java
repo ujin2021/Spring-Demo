@@ -42,6 +42,7 @@ public class UserController {
 //    }
 
     // userId + authorities 반환
+    // admin user는 userId로 모든 user의 정보를 조회 가능
     @GetMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<UserResponseDto> getMemberInfo(@PathVariable String userId) {
@@ -49,6 +50,7 @@ public class UserController {
     }
 
     // 내 정보 반환 (userId + authorities)
+    // 일반 유저는 자신의 정보만 조회 가능
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserResponseDto> getMyInfo() {
