@@ -1,4 +1,4 @@
-package com.example.jwtdemo.dto;
+package com.example.jwtdemo.dto.response;
 
 import lombok.*;
 

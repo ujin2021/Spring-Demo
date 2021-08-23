@@ -1,4 +1,4 @@
-package com.example.jwtdemo.dto;
+package com.example.jwtdemo.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class SignupDto {
 
     @NotNull
     @Size(min = 3, max = 50)
