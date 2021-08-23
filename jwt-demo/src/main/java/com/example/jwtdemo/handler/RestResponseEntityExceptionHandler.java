@@ -2,6 +2,7 @@ package com.example.jwtdemo.handler;
 
 import com.example.jwtdemo.dto.response.ErrorDto;
 import com.example.jwtdemo.exception.DuplicateMemberException;
+import com.example.jwtdemo.exception.MemberNotExistException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 
 @ControllerAdvice // application의 예외처리를 맡음
@@ -17,8 +19,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ResponseStatus(CONFLICT) // 예외의 응답상태 (409)
     @ExceptionHandler(value = { DuplicateMemberException.class })
     @ResponseBody
-    protected ErrorDto badRequest(RuntimeException ex, WebRequest request) {
+    protected ErrorDto conflict (RuntimeException ex, WebRequest request) {
         return new ErrorDto(CONFLICT.value(), ex.getMessage()); // CONFLICT value : 409
+    }
+
+    @ResponseStatus(BAD_REQUEST) // 예외의 응답상태 (400)
+    @ExceptionHandler(value = {MemberNotExistException.class })
+    @ResponseBody
+    protected ErrorDto badRequest(RuntimeException ex, WebRequest request) {
+        return new ErrorDto(BAD_REQUEST.value(), ex.getMessage());
     }
 }
 /*

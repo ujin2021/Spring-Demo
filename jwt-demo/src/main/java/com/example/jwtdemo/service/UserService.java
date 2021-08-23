@@ -2,6 +2,7 @@ package com.example.jwtdemo.service;
 
 import com.example.jwtdemo.dto.response.UserResponseDto;
 import com.example.jwtdemo.exception.DuplicateMemberException;
+import com.example.jwtdemo.exception.MemberNotExistException;
 import com.example.jwtdemo.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.example.jwtdemo.dto.request.SignupDto;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -76,7 +76,7 @@ public class UserService {
     public UserResponseDto getMemberInfo(String userId) {
         return userRepository.findByUserId(userId) // findOneWithAuthoritiesByUserId
                 .map(UserResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다"));
+                .orElseThrow(() -> new MemberNotExistException("유저 정보가 없습니다"));
     }
 
     // 현재 SecurityContext에 있는 userId를 가져와 해당하는 user 정보를 넘겨준다
@@ -84,6 +84,6 @@ public class UserService {
     public UserResponseDto getMyInfo() {
         return userRepository.findByUserId(SecurityUtil.getCurrentUserId().get())
                 .map(UserResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다"));
+                .orElseThrow(() -> new MemberNotExistException("유저 정보가 없습니다"));
     }
 }
