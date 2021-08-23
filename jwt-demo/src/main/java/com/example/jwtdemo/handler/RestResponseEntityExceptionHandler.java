@@ -1,6 +1,6 @@
 package com.example.jwtdemo.handler;
 
-import com.example.jwtdemo.dto.ErrorDto;
+import com.example.jwtdemo.dto.response.ErrorDto;
 import com.example.jwtdemo.exception.DuplicateMemberException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

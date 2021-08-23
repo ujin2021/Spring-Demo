@@ -1,6 +1,6 @@
 package com.example.jwtdemo.handler;
 
-import com.example.jwtdemo.dto.ErrorDto;
+import com.example.jwtdemo.dto.response.ErrorDto;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,7 +1,7 @@
 package com.example.jwtdemo.controller;
 
-import com.example.jwtdemo.dto.LoginDto;
-import com.example.jwtdemo.dto.TokenDto;
+import com.example.jwtdemo.dto.request.LoginDto;
+import com.example.jwtdemo.dto.response.TokenDto;
 import com.example.jwtdemo.jwt.JwtFilter;
 import com.example.jwtdemo.jwt.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
