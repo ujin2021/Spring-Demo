@@ -7,6 +7,7 @@ import com.example.jwtdemo.entity.RefreshToken;
 import com.example.jwtdemo.jwt.TokenProvider;
 import com.example.jwtdemo.repository.RefreshTokenRepository;
 import com.example.jwtdemo.repository.UserRepository;
+import com.example.jwtdemo.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,7 +20,6 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -76,5 +76,12 @@ public class AuthService {
 
         // 7. 토큰 발급
         return tokenDto;
+    }
+
+    @Transactional
+    public void logout() {
+
+        String userId = SecurityUtil.getCurrentUserId().get();
+        refreshTokenRepository.deleteByKey(userId);
     }
 }

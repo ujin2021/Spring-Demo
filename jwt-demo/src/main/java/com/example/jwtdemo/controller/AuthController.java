@@ -34,7 +34,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public ResponseEntity logout() {
-        // refresh token 삭제
+        authService.logout();
         return new ResponseEntity(HttpStatus.OK); // status code만 return
     }
 }
