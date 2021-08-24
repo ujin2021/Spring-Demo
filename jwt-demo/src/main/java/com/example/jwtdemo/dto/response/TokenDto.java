@@ -9,5 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class TokenDto { // token response시 사용
 
-    private String token;
+    private String accessToken;
+    private String refreshToken;
+    private Long accessTokenExpiresIn;
 }
