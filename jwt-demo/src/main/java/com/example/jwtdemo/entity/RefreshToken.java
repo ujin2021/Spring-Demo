@@ -2,7 +2,6 @@ package com.example.jwtdemo.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -17,9 +16,11 @@ import javax.persistence.Table;
 public class RefreshToken {
 
     @Id
-    @Column(name = "user_id", length = 50, unique = true)
-    private String userId;
+    private String key; // userId
+    private String value; // refresh token
 
-    @Column(name = "password", length = 100)
-    private String password;
+    public RefreshToken updateValue(String token) {
+        this.value = token;
+        return this;
+    }
 }
