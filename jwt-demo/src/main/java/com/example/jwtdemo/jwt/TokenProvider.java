@@ -31,7 +31,7 @@ public class TokenProvider implements InitializingBean {
 
     // 이 filed 들은 application.yml에 있는 정보로 세팅한다 (생성자로)
     private final String secret;
-    private final long ACCESS_TOKEN_EXPIRED_TIME = 1000 * 60 * 1; // 30분
+    private final long ACCESS_TOKEN_EXPIRED_TIME = 1000 * 60 * 30; // 30분
     private final long REFRESH_TOKEN_EXPIRED_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
 
     private Key key;
