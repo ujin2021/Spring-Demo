@@ -1,6 +1,7 @@
 package com.example.jwtdemo.handler;
 
 import com.example.jwtdemo.dto.response.ErrorDto;
+import com.example.jwtdemo.exception.AuthException;
 import com.example.jwtdemo.exception.DuplicateMemberException;
 import com.example.jwtdemo.exception.MemberNotExistException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +25,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ResponseStatus(BAD_REQUEST) // 예외의 응답상태 (400)
-    @ExceptionHandler(value = { MemberNotExistException.class })
+    @ExceptionHandler(value = { MemberNotExistException.class, AuthException.class})
     @ResponseBody
     protected ErrorDto badRequest(RuntimeException ex, WebRequest request) {
         return new ErrorDto(BAD_REQUEST.value(), ex.getMessage());
